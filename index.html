@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kawaii Verbs & Animals Adventure - Hello Kitty Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffe6f2 0%, #fff0f5 50%, #e6f7ff 100%);
+            min-height: 100vh;
+        }
+        .title-font {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+        }
+        .kawaii-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .kawaii-card:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="text-gray-700 flex flex-col min-h-screen">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-pink-100 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl animate-float">🌸</span>
+                <div>
+                    <h1 class="title-font text-2xl font-bold text-pink-500 tracking-wide">Kawaii Verbs & Animals Quest</h1>
+                    <p class="text-xs text-purple-400 font-medium">Verbos Irregulares (Be a Fly) & Wildlife Unit 1 • Hello Kitty Style</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 bg-pink-50 px-4 py-2 rounded-full border border-pink-200">
+                <span class="text-sm font-bold text-pink-600">💖 Puntos: <span id="score-val">0</span></span>
+                <span class="text-sm font-bold text-purple-600">⭐ Racha: <span id="streak-val">0</span></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center items-center">
+        
+        <div id="mode-screen" class="w-full text-center bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-pink-200 backdrop-blur-sm max-w-xl mx-auto">
+            <div class="text-6xl mb-4 animate-float">🎀🐱🦁</div>
+            <h2 class="title-font text-3xl font-bold text-pink-500 mb-2">¡Bienvenida al Dojo Mágico!</h2>
+            <p class="text-gray-600 mb-6 text-sm sm:text-base">
+                Elige qué aventura deseas realizar hoy con tus amigos estilo Hello Kitty:
+            </p>
+            <div class="flex flex-col gap-3">
+                <button onclick="startGame('learn')" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>📖</span><span>Verbos Irregulares (Be → Fly)</span>
+                </button>
+                <button onclick="startGame('quiz')" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>✨</span><span>Quiz Verbos Mágicos</span>
+                </button>
+                <button onclick="startAnimalsMenu()" class="bg-amber-400 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>🦁</span><span>Unit 1: Wildlife & Animals (10 Animals)</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="animals-menu-screen" class="hidden w-full text-center bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-amber-200 backdrop-blur-sm max-w-xl mx-auto">
+            <div class="text-6xl mb-4 animate-float">🌿🦒</div>
+            <h2 class="title-font text-3xl font-bold text-amber-500 mb-2">Wildlife Unit 1 (10 Animals)</h2>
+            <p class="text-gray-600 mb-6 text-sm sm:text-base">
+                Aprende y juega con los 10 animales salvajes: Camel, Deer, Wolf, Cheetah, Kangaroo, Polar Bear, Tortoise, Eagle, Beetle y Crocodile.
+            </p>
+            <div class="flex flex-col gap-3">
+                <button onclick="startAnimalsGame('study')" class="bg-amber-400 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>📚</span><span>Modo Estudio de Animales</span>
+                </button>
+                <button onclick="startAnimalsGame('memory')" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>🧠</span><span>Juego Memory (Dibujo ⇄ Nombre con audio)</span>
+                </button>
+                <button onclick="startAnimalsGame('quiz-name')" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>🎯</span><span>Quiz: Adivinar Nombre (3 Opciones)</span>
+                </button>
+                <button onclick="startAnimalsGame('quiz-image')" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center space-x-2 title-font">
+                    <span>🖼️</span><span>Quiz: Adivinar Imagen (4 Opciones)</span>
+                </button>
+                <button onclick="backToMenu()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2.5 px-6 rounded-2xl transition title-font mt-2">
+                    ← Volver al Menú Principal
+                </button>
+            </div>
+        </div>
+
+        <div id="animals-study-screen" class="hidden w-full max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="startAnimalsMenu()" class="bg-white/80 hover:bg-white text-amber-600 font-bold px-4 py-2 rounded-xl shadow-sm border border-amber-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Animales</span>
+                </button>
+                <span id="animal-card-counter" class="title-font text-amber-600 font-bold bg-amber-100 px-3 py-1 rounded-full text-sm">Animal 1 / 10</span>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-amber-300 p-6 sm:p-8 text-center relative overflow-hidden kawaii-card min-h-[380px] flex flex-col justify-between">
+                <div>
+                    <div id="animal-emoji" class="text-7xl my-3 animate-float">🐪</div>
+                    <div class="flex items-center justify-center space-x-3 mt-1">
+                        <h3 id="animal-name" class="title-font text-4xl sm:text-5xl font-extrabold text-amber-600 tracking-wide">Camel</h3>
+                        <button onclick="speakCurrentAnimalCard()" title="Escuchar pronunciación" class="bg-amber-100 hover:bg-amber-200 text-amber-600 p-2.5 rounded-full transition shadow-xs transform active:scale-95 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                        </button>
+                    </div>
+                    <p id="animal-spanish" class="text-xl sm:text-2xl font-bold text-pink-500 mt-2">Camello</p>
+                </div>
+                <div class="bg-amber-50/80 rounded-2xl p-4 my-4 border border-amber-200">
+                    <p id="animal-desc" class="text-xs sm:text-sm text-gray-600 italic">"¡Un amigo del desierto muy amigable!"</p>
+                </div>
+                <div class="flex justify-between items-center gap-3">
+                    <button onclick="prevAnimalCard()" class="flex-1 bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold py-3 px-4 rounded-2xl transition title-font">
+                        ◀ Anterior
+                    </button>
+                    <button onclick="nextAnimalCard()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-white font-bold py-3 px-4 rounded-2xl shadow-md transition title-font">
+                        Siguiente ▶
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="animals-memory-screen" class="hidden w-full max-w-2xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="startAnimalsMenu()" class="bg-white/80 hover:bg-white text-emerald-600 font-bold px-4 py-2 rounded-xl shadow-sm border border-emerald-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Animales</span>
+                </button>
+                <div class="title-font text-emerald-700 font-bold bg-emerald-100 px-3 py-1 rounded-full text-sm">Parejas encontradas: <span id="memory-pairs">0</span> / 10</div>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-300 p-4 sm:p-6 text-center">
+                <h3 class="title-font text-xl font-bold text-emerald-600 mb-4">¡Memory Game! Encuentra el dibujo y su nombre. (¡Suena el audio en inglés al girar!)</h3>
+                <div id="memory-grid" class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                    <!-- Dynamic memory cards -->
+                </div>
+            </div>
+        </div>
+
+        <div id="animals-quiz-name-screen" class="hidden w-full max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="startAnimalsMenu()" class="bg-white/80 hover:bg-white text-purple-600 font-bold px-4 py-2 rounded-xl shadow-sm border border-purple-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Animales</span>
+                </button>
+                <span id="quiz-name-counter" class="title-font text-purple-600 font-bold bg-purple-100 px-3 py-1 rounded-full text-sm">Pregunta 1 / 10</span>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-purple-300 p-6 sm:p-8 text-center relative">
+                <div id="quiz-name-emoji" class="text-7xl mb-2 animate-float">🐪</div>
+                <button onclick="speakCurrentQuizNameAudio()" class="mx-auto mb-4 bg-purple-100 hover:bg-purple-200 text-purple-600 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center justify-center space-x-1">
+                    <span>🔊 Escuchar Animal</span>
+                </button>
+                <h3 class="title-font text-xl sm:text-2xl font-bold text-purple-600 mb-6">¿Cómo se llama este animal en inglés? (<span id="quiz-name-spanish" class="text-pink-500">Camello</span>)</h3>
+                
+                <div id="quiz-name-options" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                    <!-- Options inserted here -->
+                </div>
+                <div id="quiz-name-feedback" class="hidden p-3 rounded-2xl font-bold text-sm mb-4"></div>
+                <button id="next-quiz-name-btn" onclick="nextQuizNameQuestion()" class="hidden w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition title-font">
+                    Siguiente Pregunta ✨
+                </button>
+            </div>
+        </div>
+
+        <div id="animals-quiz-image-screen" class="hidden w-full max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="startAnimalsMenu()" class="bg-white/80 hover:bg-white text-pink-600 font-bold px-4 py-2 rounded-xl shadow-sm border border-pink-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Animales</span>
+                </button>
+                <span id="quiz-image-counter" class="title-font text-pink-600 font-bold bg-pink-100 px-3 py-1 rounded-full text-sm">Pregunta 1 / 10</span>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-pink-300 p-6 sm:p-8 text-center relative">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <h3 id="quiz-image-target-name" class="title-font text-3xl font-extrabold text-pink-600">Camel</h3>
+                    <button onclick="speakCurrentQuizImageAudio()" class="bg-pink-100 hover:bg-pink-200 text-pink-600 p-2 rounded-full transition shadow-xs flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mb-6">Elige el dibujo correcto para este animal:</p>
+                
+                <div id="quiz-image-options" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                    <!-- 4 image options -->
+                </div>
+                <div id="quiz-image-feedback" class="hidden p-3 rounded-2xl font-bold text-sm mb-4"></div>
+                <button id="next-quiz-image-btn" onclick="nextQuizImageQuestion()" class="hidden w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition title-font">
+                    Siguiente Pregunta ✨
+                </button>
+            </div>
+        </div>
+
+        <div id="study-screen" class="hidden w-full max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="backToMenu()" class="bg-white/80 hover:bg-white text-pink-500 font-bold px-4 py-2 rounded-xl shadow-sm border border-pink-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Principal</span>
+                </button>
+                <span id="card-counter" class="title-font text-pink-600 font-bold bg-pink-100 px-3 py-1 rounded-full text-sm">Verbo 1 / 25</span>
+            </div>
+
+            <div id="flashcard" class="bg-white rounded-3xl shadow-2xl border-4 border-pink-300 p-6 sm:p-8 text-center relative overflow-hidden kawaii-card min-h-[420px] flex flex-col justify-between">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-100 rounded-full opacity-50 pointer-events-none"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-100 rounded-full opacity-50 pointer-events-none"></div>
+                
+                <div>
+                    <div id="card-badge" class="inline-block bg-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2 shadow-sm">Infinitivo</div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <div id="card-emoji" class="text-7xl my-3 animate-float">🌸</div>
+                    </div>
+                    <div class="flex items-center justify-center space-x-3 mt-1">
+                        <h3 id="card-inf" class="title-font text-4xl sm:text-5xl font-extrabold text-pink-600 tracking-wide">Be</h3>
+                        <button onclick="speakCurrentCard()" title="Escuchar pronunciación" class="bg-pink-100 hover:bg-pink-200 text-pink-600 p-2.5 rounded-full transition shadow-xs transform active:scale-95 flex items-center justify-center" aria-label="Escuchar pronunciación">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="card-spanish" class="text-xl sm:text-2xl font-bold text-purple-500 mt-2">ser, estar</p>
+                </div>
+
+                <div class="bg-pink-50/80 rounded-2xl p-4 my-4 border border-pink-200">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="bg-white p-2.5 rounded-xl shadow-xs relative group">
+                            <span class="block text-xs text-gray-400 font-semibold">Past Simple</span>
+                            <div class="flex items-center justify-between mt-0.5">
+                                <span id="card-past" class="font-bold text-purple-600 text-base">was / were</span>
+                                <button onclick="speakText(document.getElementById('card-past').innerText)" class="text-purple-400 hover:text-purple-600 p-1 rounded-md transition" title="Escuchar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl shadow-xs relative group">
+                            <span class="block text-xs text-gray-400 font-semibold">Past Participle</span>
+                            <div class="flex items-center justify-between mt-0.5">
+                                <span id="card-part" class="font-bold text-pink-600 text-base">been</span>
+                                <button onclick="speakText(document.getElementById('card-part').innerText)" class="text-pink-400 hover:text-pink-600 p-1 rounded-md transition" title="Escuchar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="card-desc" class="text-xs sm:text-sm text-gray-600 mt-3 italic">"¡Hola! Kitty está lista para ser muy feliz hoy."</p>
+                </div>
+
+                <div class="flex justify-between items-center gap-3">
+                    <button onclick="prevCard()" class="flex-1 bg-pink-100 hover:bg-pink-200 text-pink-600 font-bold py-3 px-4 rounded-2xl transition title-font">
+                        ◀ Anterior
+                    </button>
+                    <button onclick="nextCard()" class="flex-1 bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-md transition title-font">
+                        Siguiente ▶
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="hidden w-full max-w-xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="backToMenu()" class="bg-white/80 hover:bg-white text-pink-500 font-bold px-4 py-2 rounded-xl shadow-sm border border-pink-200 text-sm flex items-center space-x-1">
+                    <span>←</span><span>Menú Principal</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="speakCurrentQuizVerb()" class="bg-purple-100 hover:bg-purple-200 text-purple-600 p-2 rounded-full transition shadow-xs flex items-center justify-center" title="Escuchar verbo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                    </button>
+                    <span id="quiz-counter" class="title-font text-purple-600 font-bold bg-purple-100 px-3 py-1 rounded-full text-sm">Pregunta 1 / 10</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl border-4 border-purple-300 p-6 sm:p-8 text-center relative">
+                <div id="quiz-emoji" class="text-6xl mb-2 animate-float">🎯</div>
+                <h3 id="quiz-prompt" class="title-font text-xl sm:text-2xl font-bold text-purple-600 mb-6">¿Cuál es el pasado simple (Past Simple) de: <span id="quiz-verb" class="text-pink-500 underline">be</span>?</h3>
+                
+                <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    <!-- Dynamic option buttons inserted here -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-3 rounded-2xl font-bold text-sm mb-4"></div>
+
+                <button id="next-quiz-btn" onclick="nextQuizQuestion()" class="hidden w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition title-font">
+                    Siguiente Pregunta ✨
+                </button>
+            </div>
+        </div>
+
+        <div id="message-modal" class="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden z-50">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center border-4 border-pink-300 shadow-2xl animate-float">
+                <div id="modal-emoji" class="text-5xl mb-3">🌸</div>
+                <h4 id="modal-title" class="title-font text-2xl font-bold text-pink-500 mb-2">¡Excelente!</h4>
+                <p id="modal-text" class="text-gray-600 mb-6 text-sm">¡Has completado todas las cartas de esta ronda!</p>
+                <button onclick="closeModal()" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2.5 px-6 rounded-2xl shadow-md transition title-font w-full">
+                    ¡Genial! 💖
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-4 text-xs text-gray-400">
+        <p>🎀 Inspirado en la pedagogía de los verbos irregulares de Aitana & el encanto de Hello Kitty / Anime.</p>
+    </footer>
+
+    <script>
+        const verbsData = [
+            { inf: "be", past: "was/were", part: "been", spanish: "ser, estar", emoji: "🌸🐱", desc: "¡Kitty y sus amigos están listos para la gran aventura mágica!" },
+            { inf: "become", past: "became", part: "become", spanish: "convertirse en, hacerse", emoji: "✨🦋", desc: "¡Una oruga kawaii se transforma en una hermosa mariposa brillante!" },
+            { inf: "begin", past: "began", part: "begun", spanish: "empezar, comenzar", emoji: "🎬🍙", desc: "¡Comienza la deliciosa fiesta de onigiris y anime en el club!" },
+            { inf: "bite", past: "bit", part: "bitten", spanish: "morder", emoji: "🍎🐾", desc: "¡Un mordisco dulce a la manzana mágica de la suerte!" },
+            { inf: "blow", past: "blew", part: "blown", spanish: "soplar", emoji: "💨🌸", desc: "Soplando suavemente los pétalos de sakura en el viento primaveral." },
+            { inf: "break", past: "broke", part: "broken", spanish: "romper", emoji: "💔🪄", desc: "¡Oh no! El hechizo se rompió con un destello rosa." },
+            { inf: "bring", past: "brought", part: "brought", spanish: "llevar, traer", emoji: "🍱🎒", desc: "Trayendo la lonchera bento más kawaii para compartir con la clase." },
+            { inf: "build", past: "built", part: "built", spanish: "construir", emoji: "🏰✨", desc: "Construyendo un castillo flotante de nubes de azúcar y anime." },
+            { inf: "buy", past: "bought", part: "bought", spanish: "comprar", emoji: "🛍️🎀", desc: "De compras en la tienda de accesorios aesthetic en Tokio." },
+            { inf: "can", past: "could", part: "been able", spanish: "poder", emoji: "🌟💪", desc: "¡Sí, tú puedes lograr cualquier sueño si lo intentas con el corazón!" },
+            { inf: "catch", past: "caught", part: "caught", spanish: "coger, atrapar, tomar", emoji: "🦋🎏", desc: "Atrapando estrellas fugaces y peces de colores en el estanque." },
+            { inf: "choose", past: "chose", part: "chosen", spanish: "elegir, escoger", emoji: "🎯💖", desc: "Eligiendo el lazo más bonito para el festival de verano." },
+            { inf: "come", past: "came", part: "come", spanish: "venir", emoji: "🏃‍♀️🌸", desc: "¡Ven rápido! ¡Los amigos de Hello Kitty ya llegaron a la fiesta!" },
+            { inf: "cost", past: "cost", part: "cost", spanish: "costar", emoji: "💴🍡", desc: "¿Cuánto cuesta este delicioso dango rosado? ¡Es muy barato!" },
+            { inf: "cut", past: "cut", part: "cut", spanish: "cortar", emoji: "✂️🎀", desc: "Cortando cintas de seda para decorar los regalos de cumpleaños." },
+            { inf: "do", past: "did", part: "done", spanish: "hacer", emoji: "⭐🎨", desc: "Haciendo la tarea de dibujo manga con mucho esmero y color." },
+            { inf: "draw", past: "drew", part: "drawn", spanish: "dibujar", emoji: "✏️🎨", desc: "Dibujando un tierno gatito con ojos brillantes estilo anime." },
+            { inf: "drink", past: "drank", part: "drunk", spanish: "beber", emoji: "🧋✨", desc: "Bebiendo un rico té de burbujas con leche y perlas dulces." },
+            { inf: "drive", past: "drove", part: "driven", spanish: "conducir", emoji: "🚗🌸", desc: "Conduciendo el auto rosa pastel hacia la playa mágica." },
+            { inf: "eat", past: "ate", part: "eaten", spanish: "comer", emoji: "🍜🍥", desc: "Comiendo ramen caliente con orejitas de gato en el puesto tradicional." },
+            { inf: "fall", past: "fell", part: "fallen", spanish: "caer", emoji: "🍂✨", desc: "Las hojas de arce caen suavemente sobre el tejado rojo." },
+            { inf: "feel", past: "felt", part: "felt", spanish: "sentir", emoji: "💗🐾", desc: "Sintiendo una gran alegría y paz en este día tan kawaii." },
+            { inf: "fight", past: "fought", part: "fought", spanish: "pelear, luchar", emoji: "⚔️🌸", desc: "Luchando con valentía y honor como una heroína de magical girl." },
+            { inf: "find", past: "found", part: "found", spanish: "encontrar", emoji: "🔍💎", desc: "Encontrando un tesoro escondido debajo del arcoíris." },
+            { inf: "fly", past: "flew", part: "flown", spanish: "volar", emoji: "🕊️✨", desc: "Volar alto por el cielo azul sobre una nube de algodón dulce." }
+        ];
+
+        const animalsData = [
+            { name: "camel", spanish: "camello", emoji: "🐪", desc: "Un amigable habitante del desierto." },
+            { name: "deer", spanish: "ciervo", emoji: "🦌", desc: "Un elegante animal del bosque." },
+            { name: "wolf", spanish: "lobo", emoji: "🐺", desc: "Aullando bajo la luna llena kawaii." },
+            { name: "cheetah", spanish: "guepardo", emoji: "🐆", desc: "¡El felino más rápido y veloz!" },
+            { name: "kangaroo", spanish: "canguro", emoji: "🦘", desc: "Saltando alegremente con su bolsa mágica." },
+            { name: "polar bear", spanish: "oso polar", emoji: "🐻‍❄️", desc: "Disfrutando de la nieve fresquita." },
+            { name: "tortoise", spanish: "tortuga", emoji: "🐢", desc: "Paso a paso con una sonrisa paciente." },
+            { name: "eagle", spanish: "águila", emoji: "🦅", desc: "Volar alto en el cielo azul." },
+            { name: "beetle", spanish: "escarabajo", emoji: "🪲", desc: "Un pequeño insecto brillante del jardín." },
+            { name: "crocodile", spanish: "cocodrilo", emoji: "🐊", desc: "Sonriendo con dientes relucientes." }
+        ];
+
+        let currentCardIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let currentQuizIndex = 0;
+        let quizQuestions = [];
+
+        let currentAnimalCardIndex = 0;
+        let memoryCards = [];
+        let firstMemoryCard = null;
+        let secondMemoryCard = null;
+        let lockMemoryBoard = false;
+        let matchedMemoryPairs = 0;
+
+        let currentQuizNameIndex = 0;
+        let quizNameQuestions = [];
+        let currentQuizImageIndex = 0;
+        let quizImageQuestions = [];
+
+        function speakText(text, lang = 'en-US') {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCurrentCard() {
+            const verb = verbsData[currentCardIndex];
+            const textToSpeak = `${verb.inf}, past simple, ${verb.past}, past participle, ${verb.part}`;
+            speakText(textToSpeak);
+        }
+
+        function speakCurrentQuizVerb() {
+            if (quizQuestions.length > 0 && currentQuizIndex < quizQuestions.length) {
+                speakText(quizQuestions[currentQuizIndex].inf);
+            }
+        }
+
+        function startGame(mode) {
+            hideAllScreens();
+            if (mode === 'learn') {
+                document.getElementById('study-screen').classList.remove('hidden');
+                currentCardIndex = 0;
+                renderCard();
+            } else if (mode === 'quiz') {
+                document.getElementById('quiz-screen').classList.remove('hidden');
+                initQuiz();
+            }
+        }
+
+        function startAnimalsMenu() {
+            hideAllScreens();
+            document.getElementById('animals-menu-screen').classList.remove('hidden');
+        }
+
+        function startAnimalsGame(gameMode) {
+            hideAllScreens();
+            if (gameMode === 'study') {
+                document.getElementById('animals-study-screen').classList.remove('hidden');
+                currentAnimalCardIndex = 0;
+                renderAnimalCard();
+            } else if (gameMode === 'memory') {
+                document.getElementById('animals-memory-screen').classList.remove('hidden');
+                initMemoryGame();
+            } else if (gameMode === 'quiz-name') {
+                document.getElementById('animals-quiz-name-screen').classList.remove('hidden');
+                initQuizName();
+            } else if (gameMode === 'quiz-image') {
+                document.getElementById('animals-quiz-image-screen').classList.remove('hidden');
+                initQuizImage();
+            }
+        }
+
+        function hideAllScreens() {
+            document.getElementById('mode-screen').classList.add('hidden');
+            document.getElementById('study-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('animals-menu-screen').classList.add('hidden');
+            document.getElementById('animals-study-screen').classList.add('hidden');
+            document.getElementById('animals-memory-screen').classList.add('hidden');
+            document.getElementById('animals-quiz-name-screen').classList.add('hidden');
+            document.getElementById('animals-quiz-image-screen').classList.add('hidden');
+        }
+
+        function backToMenu() {
+            hideAllScreens();
+            document.getElementById('mode-screen').classList.remove('hidden');
+        }
+
+        function renderAnimalCard() {
+            const animal = animalsData[currentAnimalCardIndex];
+            document.getElementById('animal-card-counter').innerText = `Animal ${currentAnimalCardIndex + 1} / ${animalsData.length}`;
+            document.getElementById('animal-emoji').innerText = animal.emoji;
+            document.getElementById('animal-name').innerText = animal.name.toUpperCase();
+            document.getElementById('animal-spanish').innerText = animal.spanish;
+            document.getElementById('animal-desc').innerText = `"${animal.desc}"`;
+            speakText(animal.name);
+        }
+
+        function speakCurrentAnimalCard() {
+            const animal = animalsData[currentAnimalCardIndex];
+            speakText(animal.name);
+        }
+
+        function nextAnimalCard() {
+            currentAnimalCardIndex++;
+            if (currentAnimalCardIndex >= animalsData.length) {
+                currentAnimalCardIndex = 0;
+            }
+            renderAnimalCard();
+        }
+
+        function prevAnimalCard() {
+            currentAnimalCardIndex--;
+            if (currentAnimalCardIndex < 0) {
+                currentAnimalCardIndex = animalsData.length - 1;
+            }
+            renderAnimalCard();
+        }
+
+        function initMemoryGame() {
+            matchedMemoryPairs = 0;
+            document.getElementById('memory-pairs').innerText = matchedMemoryPairs;
+            memoryCards = [];
+
+            animalsData.forEach((anim, idx) => {
+                memoryCards.push({ id: idx, type: 'image', value: anim.name, emoji: anim.emoji, spanish: anim.spanish });
+                memoryCards.push({ id: idx, type: 'name', value: anim.name, emoji: anim.emoji, spanish: anim.spanish });
+            });
+
+            memoryCards.sort(() => 0.5 - Math.random());
+
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            memoryCards.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = "bg-emerald-100 hover:bg-emerald-200 cursor-pointer h-24 rounded-2xl flex items-center justify-center border-2 border-emerald-300 shadow-sm transition transform active:scale-95 text-center p-2 select-none";
+                cardEl.dataset.index = index;
+                cardEl.innerHTML = `<span class="text-3xl">❓</span>`;
+                cardEl.onclick = () => flipMemoryCard(cardEl, card);
+                grid.appendChild(cardEl);
+            });
+
+            firstMemoryCard = null;
+            secondMemoryCard = null;
+            lockMemoryBoard = false;
+        }
+
+        function flipMemoryCard(cardEl, card) {
+            if (lockMemoryBoard) return;
+            if (cardEl.classList.contains('matched') || cardEl.classList.contains('flipped')) return;
+
+            cardEl.classList.add('flipped', 'bg-white');
+            cardEl.classList.remove('bg-emerald-100');
+
+            if (card.type === 'image') {
+                cardEl.innerHTML = `<div class="text-4xl animate-float">${card.emoji}</div>`;
+            } else {
+                cardEl.innerHTML = `<div class="title-font font-bold text-emerald-700 text-xs sm:text-sm">${card.value.toUpperCase()}</div>`;
+            }
+
+            speakText(card.value);
+
+            if (!firstMemoryCard) {
+                firstMemoryCard = { cardEl, card };
+                return;
+            }
+
+            secondMemoryCard = { cardEl, card };
+            checkMemoryMatch();
+        }
+
+        function checkMemoryMatch() {
+            const isMatch = firstMemoryCard.card.id === secondMemoryCard.card.id && firstMemoryCard.card.type !== secondMemoryCard.card.type;
+
+            if (isMatch) {
+                firstMemoryCard.cardEl.classList.add('matched', 'border-emerald-500', 'bg-emerald-50');
+                secondMemoryCard.cardEl.classList.add('matched', 'border-emerald-500', 'bg-emerald-50');
+                matchedMemoryPairs++;
+                document.getElementById('memory-pairs').innerText = matchedMemoryPairs;
+                resetMemoryTurn();
+
+                if (matchedMemoryPairs === 10) {
+                    setTimeout(() => {
+                        showModal("¡Increíble! 🏆", "¡Has completado el Memory de los 10 animales con éxito!", "🦁✨");
+                    }, 400);
+                }
+            } else {
+                lockMemoryBoard = true;
+                setTimeout(() => {
+                    firstMemoryCard.cardEl.classList.remove('flipped', 'bg-white');
+                    firstMemoryCard.cardEl.classList.add('bg-emerald-100');
+                    firstMemoryCard.cardEl.innerHTML = `<span class="text-3xl">❓</span>`;
+
+                    secondMemoryCard.cardEl.classList.remove('flipped', 'bg-white');
+                    secondMemoryCard.cardEl.classList.add('bg-emerald-100');
+                    secondMemoryCard.cardEl.innerHTML = `<span class="text-3xl">❓</span>`;
+
+                    resetMemoryTurn();
+                }, 1000);
+            }
+        }
+
+        function resetMemoryTurn() {
+            firstMemoryCard = null;
+            secondMemoryCard = null;
+            lockMemoryBoard = false;
+        }
+
+        function initQuizName() {
+            quizNameQuestions = [...animalsData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentQuizNameIndex = 0;
+            loadQuizNameQuestion();
+        }
+
+        function loadQuizNameQuestion() {
+            if (currentQuizNameIndex >= quizNameQuestions.length) {
+                showModal("¡Quiz de Nombres Completado! 🌟", "¡Has acertado todos los nombres de animales!", "🐾🎉");
+                startAnimalsMenu();
+                return;
+            }
+
+            const q = quizNameQuestions[currentQuizNameIndex];
+            document.getElementById('quiz-name-counter').innerText = `Pregunta ${currentQuizNameIndex + 1} / 10`;
+            document.getElementById('quiz-name-emoji').innerText = q.emoji;
+            document.getElementById('quiz-name-spanish').innerText = q.spanish;
+
+            speakText(q.name);
+
+            let options = [q.name];
+            while (options.length < 3) {
+                const randomAnim = animalsData[Math.floor(Math.random() * animalsData.length)].name;
+                if (!options.includes(randomAnim)) {
+                    options.push(randomAnim);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('quiz-name-options');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold p-4 rounded-2xl border-2 border-purple-200 transition transform active:scale-95 title-font text-lg uppercase";
+                btn.innerText = opt;
+                btn.onclick = () => checkQuizNameAnswer(opt, q.name, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('quiz-name-feedback').classList.add('hidden');
+            document.getElementById('next-quiz-name-btn').classList.add('hidden');
+        }
+
+        function speakCurrentQuizNameAudio() {
+            if (quizNameQuestions.length > 0) {
+                speakText(quizNameQuestions[currentQuizNameIndex].name);
+            }
+        }
+
+        function checkQuizNameAnswer(selected, correct, btnElement) {
+            const allBtns = document.getElementById('quiz-name-options').getElementsByTagName('button');
+            for (let b of allBtns) {
+                b.disabled = true;
+                if (b.innerText.toLowerCase() === correct.toLowerCase()) {
+                    b.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                    b.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+                }
+            }
+
+            const feedback = document.getElementById('quiz-name-feedback');
+            feedback.classList.remove('hidden');
+
+            if (selected.toLowerCase() === correct.toLowerCase()) {
+                btnElement.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                btnElement.classList.add('bg-pink-100', 'text-pink-700', 'border-pink-300');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-pink-100 text-pink-600 border border-pink-300";
+                feedback.innerText = "🌸 ¡Correcto! ¡Excelente memoria!";
+                score += 10;
+                streak++;
+            } else {
+                btnElement.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                btnElement.classList.add('bg-red-100', 'text-red-700', 'border-red-300');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-red-100 text-red-600 border border-red-300";
+                feedback.innerText = "💫 ¡Ups! La respuesta correcta era " + correct.toUpperCase();
+                streak = 0;
+            }
+            updateScoreBoard();
+            document.getElementById('next-quiz-name-btn').classList.remove('hidden');
+        }
+
+        function nextQuizNameQuestion() {
+            currentQuizNameIndex++;
+            loadQuizNameQuestion();
+        }
+
+        function initQuizImage() {
+            quizImageQuestions = [...animalsData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentQuizImageIndex = 0;
+            loadQuizImageQuestion();
+        }
+
+        function loadQuizImageQuestion() {
+            if (currentQuizImageIndex >= quizImageQuestions.length) {
+                showModal("¡Quiz de Imágenes Completado! 🏆", "¡Eres una experta absoluta en fauna salvaje!", "🦁💖");
+                startAnimalsMenu();
+                return;
+            }
+
+            const q = quizImageQuestions[currentQuizImageIndex];
+            document.getElementById('quiz-image-counter').innerText = `Pregunta ${currentQuizImageIndex + 1} / 10`;
+            document.getElementById('quiz-image-target-name').innerText = q.name.toUpperCase();
+
+            speakText(q.name);
+
+            let options = [q];
+            while (options.length < 4) {
+                const randomAnim = animalsData[Math.floor(Math.random() * animalsData.length)];
+                if (!options.some(o => o.name === randomAnim.name)) {
+                    options.push(randomAnim);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('quiz-image-options');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-pink-50 hover:bg-pink-100 p-5 rounded-2xl border-2 border-pink-200 transition transform active:scale-95 flex items-center justify-center text-5xl shadow-xs";
+                btn.innerHTML = opt.emoji;
+                btn.onclick = () => checkQuizImageAnswer(opt.name, q.name, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('quiz-image-feedback').classList.add('hidden');
+            document.getElementById('next-quiz-image-btn').classList.add('hidden');
+        }
+
+        function speakCurrentQuizImageAudio() {
+            if (quizImageQuestions.length > 0) {
+                speakText(quizImageQuestions[currentQuizImageIndex].name);
+            }
+        }
+
+        function checkQuizImageAnswer(selectedName, correctName, btnElement) {
+            const allBtns = document.getElementById('quiz-image-options').getElementsByTagName('button');
+            for (let b of allBtns) {
+                b.disabled = true;
+                if (b.onclick.toString().includes(correctName)) {
+                    b.classList.add('bg-green-100', 'border-green-300');
+                }
+            }
+
+            const feedback = document.getElementById('quiz-image-feedback');
+            feedback.classList.remove('hidden');
+
+            if (selectedName.toLowerCase() === correctName.toLowerCase()) {
+                btnElement.classList.add('bg-pink-200', 'border-pink-400');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-pink-100 text-pink-600 border border-pink-300";
+                feedback.innerText = "🌸 ¡Perfecto! ¡Ese es el animal correcto!";
+                score += 10;
+                streak++;
+            } else {
+                btnElement.classList.add('bg-red-100', 'border-red-300');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-red-100 text-red-600 border border-red-300";
+                feedback.innerText = "💫 ¡Ups! Ese no era. El correcto está marcado en verde.";
+                streak = 0;
+            }
+            updateScoreBoard();
+            document.getElementById('next-quiz-image-btn').classList.remove('hidden');
+        }
+
+        function nextQuizImageQuestion() {
+            currentQuizImageIndex++;
+            loadQuizImageQuestion();
+        }
+
+        function renderCard() {
+            const verb = verbsData[currentCardIndex];
+            document.getElementById('card-counter').innerText = `Verbo ${currentCardIndex + 1} / ${verbsData.length}`;
+            document.getElementById('card-emoji').innerText = verb.emoji;
+            document.getElementById('card-inf').innerText = verb.inf;
+            document.getElementById('card-spanish').innerText = verb.spanish;
+            document.getElementById('card-past').innerText = verb.past;
+            document.getElementById('card-part').innerText = verb.part;
+            document.getElementById('card-desc').innerText = `"${verb.desc}"`;
+        }
+
+        function nextCard() {
+            currentCardIndex++;
+            if (currentCardIndex >= verbsData.length) {
+                currentCardIndex = 0;
+                showModal("¡Felicidades! 🎉", "¡Has repasado toda la lista de verbos desde 'be' hasta 'fly'! Eres una experta kawaii.", "🌟");
+            }
+            renderCard();
+        }
+
+        function prevCard() {
+            currentCardIndex--;
+            if (currentCardIndex < 0) {
+                currentCardIndex = verbsData.length - 1;
+            }
+            renderCard();
+        }
+
+        function initQuiz() {
+            score = 0;
+            streak = 0;
+            updateScoreBoard();
+            quizQuestions = [...verbsData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentQuizIndex = 0;
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showModal("¡Quiz Completado! 🏆", `¡Has terminado el reto con ${score} puntos de racha mágica!`, "🌸✨");
+                backToMenu();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-counter').innerText = `Pregunta ${currentQuizIndex + 1} / 10`;
+            document.getElementById('quiz-emoji').innerText = q.emoji;
+            document.getElementById('quiz-verb').innerText = q.inf;
+            
+            speakText(q.inf);
+
+            const isPastQuiz = Math.random() > 0.5;
+            let targetAnswer = isPastQuiz ? q.past : q.spanish;
+            document.getElementById('quiz-prompt').innerHTML = isPastQuiz 
+                ? `¿Cuál es el <b>Past Simple</b> de: <span class="text-pink-500 underline">${q.inf}</span>?`
+                : `¿Cuál es el significado en <b>español</b> de: <span class="text-pink-500 underline">${q.inf}</span>?`;
+
+            let options = [targetAnswer];
+            while (options.length < 4) {
+                const randomVerb = verbsData[Math.floor(Math.random() * verbsData.length)];
+                const wrongVal = isPastQuiz ? randomVerb.past : randomVerb.spanish;
+                if (!options.includes(wrongVal)) {
+                    options.push(wrongVal);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold p-3 sm:p-4 rounded-2xl border-2 border-purple-200 transition transform active:scale-95 text-base title-font";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, targetAnswer, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('next-quiz-btn').classList.add('hidden');
+        }
+
+        function checkAnswer(selected, correct, btnElement) {
+            const allBtns = document.getElementById('quiz-options').getElementsByTagName('button');
+            for (let b of allBtns) {
+                b.disabled = true;
+                if (b.innerText === correct) {
+                    b.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                    b.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+                }
+            }
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            if (selected === correct) {
+                btnElement.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                btnElement.classList.add('bg-pink-100', 'text-pink-700', 'border-pink-300');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-pink-100 text-pink-600 border border-pink-300";
+                feedback.innerText = "🌸 ¡Correcto! ¡Qué gran trabajo, senpai! ✨";
+                score += 10;
+                streak++;
+            } else {
+                btnElement.classList.remove('bg-purple-50', 'text-purple-700', 'border-purple-200');
+                btnElement.classList.add('bg-red-100', 'text-red-700', 'border-red-300');
+                feedback.className = "p-3 rounded-2xl font-bold text-sm mb-4 bg-red-100 text-red-600 border border-red-300";
+                feedback.innerText = "💫 ¡Ups! La respuesta correcta era la marcada en verde. ¡Tú puedes!";
+                streak = 0;
+            }
+
+            updateScoreBoard();
+            document.getElementById('next-quiz-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            loadQuizQuestion();
+        }
+
+        function updateScoreBoard() {
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('streak-val').innerText = streak;
+        }
+
+        function showModal(title, text, emoji) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('modal-emoji').innerText = emoji;
+            document.getElementById('message-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('message-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
